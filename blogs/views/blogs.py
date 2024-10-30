@@ -3,43 +3,43 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from users.models import UserModel
-from users.serializers import UserSerializer
+from blogs.models import BlogModel
+from blogs.serializers import BlogSerializer
 
 
 @api_view(['GET', 'POST'])
-def users_list_create_view(request):
+def blogs_list_create_view(request):
     if request.method == 'GET':
-        users = UserModel.objects.all()
-        serializer = UserSerializer(users, many=True)
+        blogs = BlogModel.objects.all()
+        serializer = BlogSerializer(blogs, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
+        serializer = BlogSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def user_detail(request, pk):
-    user = get_object_or_404(UserModel, pk=pk)
+def blog_detail(request, pk):
+    blog = get_object_or_404(BlogModel, pk=pk)
     if request.method == 'GET':
-        serializer = UserSerializer(user)
+        serializer = BlogSerializer(blog)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'PUT':
-        serializer = UserSerializer(instance=user, data=request.data)
+        serializer = BlogSerializer(instance=blog, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
 
     elif request.method == 'PATCH':
-        serializer = UserSerializer(instance=user, data=request.data, partial=True)
+        serializer = BlogSerializer(instance=blog, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
 
     elif request.method == 'DELETE':
-        user.delete()
+        blog.delete()
         return Response(data={'success': True}, status=status.HTTP_204_NO_CONTENT)
