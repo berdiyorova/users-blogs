@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from blogs.models import BlogModel
 from blogs.serializers import BlogSerializer
+from users.models import UserModel
 
 
 @api_view(['GET', 'POST'])
@@ -43,3 +44,13 @@ def blog_detail(request, pk):
     elif request.method == 'DELETE':
         blog.delete()
         return Response(data={'success': True}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def user_blogs(request, pk):
+    blogs = BlogModel.objects.filter(author=UserModel.objects.get(pk=pk))
+    if request.method == 'GET':
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

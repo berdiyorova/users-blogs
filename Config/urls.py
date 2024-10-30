@@ -23,8 +23,8 @@ from Config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('users/', include('users.urls', namespace='users')),
-    path('blogs/', include('blogs.urls', namespace='blogs')),
+    path('users', include('users.urls', namespace='users')),
+    path('blogs', include('blogs.urls', namespace='blogs')),
 ]
 
 if settings.DEBUG:
